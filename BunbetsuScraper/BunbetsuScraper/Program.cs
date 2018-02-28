@@ -51,7 +51,11 @@ namespace BunbetsuScraper
 				var itemName = "";
 				if (IsTopItem(item))
 				{
-					itemName = item.ChildNodes[3].TextContent;
+					itemName = item.Children[1].TextContent;
+				}
+				else if (IsDetailTopItem(item))
+				{
+					itemName = item.Children[1].TextContent;
 				}
 				else if (IsNormalItem(item))
 				{
@@ -59,12 +63,20 @@ namespace BunbetsuScraper
 				}
 				else if (IsDetailItem(item))
 				{
-					itemName = item.ChildNodes[2].TextContent;
+					itemName = item.Children[0].TextContent;
 				}
 				else
 				{
-					itemName = item.ChildNodes[1].TextContent;
+					itemName = item.Children[0].TextContent;
 				}
+
+				itemName = string.Join("", itemName.Split("\n").Select(t => t.Trim()));
+
+				if (string.IsNullOrWhiteSpace(itemName))
+				{
+					continue;
+				}
+
 				Console.WriteLine(itemName);
 			}
 		}
@@ -78,12 +90,22 @@ namespace BunbetsuScraper
 
 		private static bool IsNormalItem(IElement item)
 		{
-			return item.ChildElementCount == 4 && item.FirstElementChild.HasAttribute("colspan");
+			return item.ChildElementCount == 4
+				&& item.FirstElementChild.HasAttribute("colspan");
 		}
 
 		private static bool IsTopItem(IElement item)
 		{
-			return item.ChildElementCount == 5 && item.FirstElementChild.HasAttribute("rowspan");
+			return item.ChildElementCount == 5 
+				&& item.FirstElementChild.HasAttribute("rowspan")
+				&& item.FirstElementChild.TextContent.Length == 1;
+		}
+
+		private static bool IsDetailTopItem(IElement item)
+		{
+			return item.ChildElementCount == 6
+				&& item.FirstElementChild.HasAttribute("rowspan")
+				&& item.FirstElementChild.TextContent.Length == 1;
 		}
 
 		private static bool IsHeader(IElement item)
