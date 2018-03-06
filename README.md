@@ -18,6 +18,9 @@ GoogleHomeにゴミの品名を言うと分別種類をこたえてくれる(予
 EntitiesのUpload Entitiesで、作成したCSVをアップロード
 ゴミの分別ごとにIntentを作成することで、DialogFlowに分別を判断させる。
 
+可燃ごみの例
+![Intentサンプル](https://github.com/yukilabo/GooGomiHome/blob/master/image/intent.png "サンプル")
+
 ## License
    Copyright 2018 yukilabo
 
